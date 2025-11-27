@@ -20,13 +20,13 @@ router.post('/bookadded', function (req, res, next) {
     // saving data in database
     let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)"
     // execute sql query
-    let newrecord = [req.body.name, req.body.price]
+    let newrecord = [ req.sanitize(req.body.name),req.sanitize(req.body.price)]
     db.query(sqlquery, newrecord, (err, result) => {
         if (err) {
             next(err)
         }
         else
-            res.send(' This book is added to database, name: '+ req.body.name + ' price '+ req.body.price)
+            res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.sanitize(req.body.price))
     })
 }) 
 router.get('/bargainbooks', function(req, res, next) {
