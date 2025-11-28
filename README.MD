@@ -1,3 +1,4 @@
+
 # Bertie's Books
 
 Sample code for the Dynamic Web Applications module.
@@ -7,9 +8,9 @@ This project uses:
 - EJS templating engine  
 - MySQL for database storage  
 
-===========================
-📦 Installation & Running
-===========================
+---
+
+## 📦 Installation & Running
 
 1. Clone the repository and navigate into the folder:
 
@@ -22,6 +23,8 @@ cd berties-books
 
 ```bash
 npm install
+npm install express-validator
+npm install express-sanitizer
 ```
 
 3. Start the server:
@@ -33,9 +36,9 @@ node index.js
 The app will run at:  
 http://localhost:8000
 
-===========================
-🛠️ MySQL Setup Instructions
-===========================
+---
+
+## 🛠️ MySQL Setup Instructions
 
 1. Start MySQL:
 
@@ -91,9 +94,9 @@ INSERT INTO books (name, price) VALUES
 ('EJS Templating Basics', 15.00);
 ```
 
-===========================
-🧪 Test Pages
-===========================
+---
+
+## 🧪 Test Pages
 
 - /books/list — View all books  
 - /books/addbook — Add a new book  
@@ -103,9 +106,9 @@ INSERT INTO books (name, price) VALUES
 - /users/login — Login  
 - /users/audit — View audit log  
 
-===========================
-📁 Folder Structure
-===========================
+---
+
+## 📁 Folder Structure
 
 ```
 /routes       → Route handlers (books, main, users)
@@ -114,9 +117,9 @@ INSERT INTO books (name, price) VALUES
 /index.js     → Main app entry point
 ```
 
-===========================
-🔐 dotenv (Environment Variables)
-===========================
+---
+
+## 🔐 dotenv (Environment Variables)
 
 To securely store database credentials and prevent them from being committed to GitHub, this project uses the `dotenv` package.
 
@@ -160,14 +163,41 @@ const db = mysql.createPool({
 .env
 ```
 
-===========================
-📝 Audit (Feature Documentation)
-===========================
+---
 
-This project includes an **audit logging feature** that records all login attempts.  
-The feature was implemented as follows:
+## 🔒 Validation & Sanitisation
+
+This project uses `express-validator` and `express-sanitizer` for input validation and protection against XSS (Cross-Site Scripting):
+
+- Validation checks are used on the **register** page to ensure:
+  - Email is a valid format
+  - Username is between 5 and 20 characters
+  - Password is at least 8 characters
+
+- Sanitisation is used to clean input fields (e.g., `first_name`, `last_name`) and prevent injection of malicious scripts.
+
+To install:
+
+```bash
+npm install express-validator
+npm install express-sanitizer
+```
+
+Sanitisation setup in `index.js`:
+
+```js
+const expressSanitizer = require('express-sanitizer');
+app.use(expressSanitizer());
+```
+
+---
+
+## 📝 Audit (Feature Documentation)
+
+This project includes an **audit logging feature** that records all login attempts.
 
 ### **1. Audit Table**
+
 A database table `audit_log` was created:
 
 ```sql
@@ -185,6 +215,7 @@ Each entry stores:
 - the timestamp of the action  
 
 ### **2. Logging Login Attempts**
+
 Inside `/routes/users.js`, audit entries are created whenever a user attempts login:
 
 ```js
@@ -197,6 +228,7 @@ The system logs:
 - failed logins where the username does not exist  
 
 ### **3. Viewing the Audit Log**
+
 A new route `/users/audit` displays all audit entries:
 
 ```js
@@ -212,6 +244,7 @@ router.get('/audit', function (req, res, next) {
 The audit history is rendered through `audit.ejs` as a table showing username, action, and timestamp.
 
 ### **4. Purpose of the Audit Feature**
+
 The audit log provides:
 - traceability for login activity  
 - a record of failed or suspicious login attempts  
