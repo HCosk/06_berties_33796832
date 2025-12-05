@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Search</title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+
+</head>
+<body>
+    <h1>Check the Weather</h1>
+
+    <form action="/weather" method="get">
+        <label for="city">Enter a city:</label>
+        <input type="text" name="city" id="city" required>
+        <button type="submit">Search</button>
+    </form>
+<% if (typeof error !== 'undefined') { %>
+    <div class="error-box">
+        <p style="color:red;"><strong>Error:</strong> <%= error %></p>
+    </div>
+<% } %>
+    <% if (typeof weather !== "undefined") { %>
+    <h2>Weather for <%= weather.name %></h2>
+
+    <p><strong>Temperature:</strong> <%= weather.main.temp %>°C</p>
+    <p><strong>Feels Like:</strong> <%= weather.main.feels_like %>°C</p>
+    <p><strong>Humidity:</strong> <%= weather.main.humidity %>%</p>
+    <p><strong>Pressure:</strong> <%= weather.main.pressure %> hPa</p>
+
+    <p><strong>Wind Speed:</strong> <%= weather.wind.speed %> m/s</p>
+    <% if (weather.wind.deg) { %>
+        <p><strong>Wind Direction:</strong> <%= weather.wind.deg %>°</p>
+    <% } %>
+
+    <p><strong>Cloudiness:</strong> <%= weather.clouds.all %>%</p>
+
+    <p><strong>Conditions:</strong> <%= weather.weather[0].description %></p>
+
+    <% 
+        // Convert UNIX time (seconds) → readable
+        function time(unix) {
+            return new Date(unix * 1000).toLocaleTimeString();
+        }
+    %>
+
+    <p><strong>Sunrise:</strong> <%= time(weather.sys.sunrise) %></p>
+    <p><strong>Sunset:</strong> <%= time(weather.sys.sunset) %></p>
+
+    <p><strong>Coordinates:</strong> [<%= weather.coord.lat %>, <%= weather.coord.lon %>]</p>
+<% } %>
+
+</body>
+</html>
