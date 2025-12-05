@@ -2,6 +2,8 @@
 const express = require("express")
 const router = express.Router()
 const request = require('request')
+require('dotenv').config();
+
 // Handle our routes
 router.get('/',function(req, res, next){
     res.render('index.ejs')
@@ -16,7 +18,7 @@ router.get('/books/addbook',function(req, res, next){
 });
 
 router.get('/weather', function(req, res, next) {
-    let apiKey = process.env.WEATHER_API || '12766fe0ce216e94f543e0e70fd1af9e';
+    let apiKey = process.env.WEATHER_API;
     let city = req.query.city;
 
     // If no city yet, show blank form
